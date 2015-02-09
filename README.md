@@ -13,23 +13,43 @@ API for saving and retrieving bookmarks
 
 A user represents a person. The /{user-id} node returns data for a single user.
 
+## Reading
+```
+GET /v1.0/user/{user-id}
+```
+
 ### Fields
 
 | Name | Description | Type |
 | ---- | ----------- | ---- |
 | id   | The unique id of the persons account | string |
+| created_date | The Date the user was created | datetime |
 | email | The persons primary email | string |
 |first_name | The person's first name | string |
 | last_name | The person's last name | string |
 | name | The person's full name | string |
 
-### Edges
+## Creating
+```
+POST /v1.0/user
+```
+
+### Fields
+
+| Name | Description | Type |
+| ---- | ----------- | ---- |
+| email | The persons primary email | string |
+|first_name | The person's first name | string |
+| last_name | The person's last name | string |
+| name | The person's full name | string |
+
+## Edges
 
 | Name | Description |
 | ---- | ------------|
-| /bookmark | Get the bookmarks for a user |
+| /bookmarks | Get the bookmarks for a user |
 
-# /{user-id}/bookmark
+## /user/{user-id}/bookmarks
 An array of the user's bookmark objects
 
 ----
@@ -40,6 +60,10 @@ An array of the user's bookmark objects
 /bookmark/{bookmark-id}
 
 ## Reading
+```
+GET /v1.0/bookmark/{bookmark-id}
+```
+
 ### Fields
 
 | Name | Description | Type |
@@ -51,7 +75,9 @@ An array of the user's bookmark objects
 | url | The web address of the bookmark | string |
 
 ## Creating
-
+```
+POST /v1.0/bookmark
+```
 | Name | Description | Type |
 | ---- | ----------- | ---- |
 | name | The name specified for the bookmark | string |
