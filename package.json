@@ -1,0 +1,21 @@
+{
+  "name": "bookmarks-api",
+  "version": "0.0.0",
+  "description": "API for saving and retrieving bookmarks",
+  "main": "server.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git@github.com:damc-dev/bookmarks-api.git"
+  },
+  "author": "David McElligott",
+  "license": "BSD-2-Clause",
+  "bugs": {
+    "url": "https://github.com/damc-dev/bookmarks-api/issues"
+  },
+  "dependencies": {
+    "restify": "~2.8.5"
+  }
+}
