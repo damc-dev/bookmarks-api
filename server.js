@@ -18,9 +18,9 @@ server.get('/user/:userId', function (req, res, next) {
 server.get('/bookmark', bookmark.list);
 server.post('/bookmark', bookmark.create);
 
-server.get('/bookmark/:bookmarkId', bookmark.find);
-server.put('/bookmark/:bookmarkId', bookmark.update);
-server.del('/bookmark/:bookmarkId', bookmark.delete);
+server.get('/bookmark/:id', bookmark.find);
+server.put('/bookmark/:id', bookmark.update);
+server.del('/bookmark/:id', bookmark.delete);
 
 server.listen(8080, function () {
   console.log('%s listening at %s', server.name, server.url);

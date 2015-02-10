@@ -48,4 +48,31 @@ describe('service bookmark: ', function() {
           });
       });
     });
+
+    describe('update bookmark', function() {
+      before(function() {
+        client.post('/bookmark',
+          {name: 'dmcelligott.com', type: 'url', url: 'http://dmcelligott.com'},
+          function(err, req, res, data) {
+            assert.equal('dmcelligott.com', data.name);
+            assert.equal('url', data.type);
+            assert.equal('http://dmcelligott.com', data.url);
+          });
+      });
+      it('response should 200', function(done) {
+          client.put('/bookmark/1',
+          {name: 'My Website', type: 'url', url: 'http://dmcelligott.com'},
+          function(err, req, res, obj) {
+            assert.equal(200, res.statusCode);
+            done();
+          });
+      });
+      after(function() {
+        client.get('/bookmark/1', function(err, req, res, data) {
+          assert.equal('My Website', data.name);
+          assert.equal('url', data.type);
+          assert.equal('http://dmcelligott.com', data.url);
+        });
+      });
+    });
 });
