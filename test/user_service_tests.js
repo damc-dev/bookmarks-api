@@ -5,7 +5,7 @@ var client = restify.createJsonClient({
 
 
 describe('service: user', function() {
-    
+
     describe('200 response check', function() {
         it('should get a 200 response', function(done) {
             client.get('/user/1', function(err, req, res, data) {
