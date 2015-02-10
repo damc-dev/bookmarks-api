@@ -7,7 +7,7 @@ var client = restify.createJsonClient({
 describe('service bookmark: ', function() {
 
     describe('get bookmark where bookmark doesnt exist', function() {
-        it('should get a 404 response', function(done) {
+        it('should get a 404 response code', function(done) {
             client.get('/bookmark/1', function(err, req, res, data) {
                 if(err) {
                   if(err.statusCode != 404) {
@@ -22,7 +22,7 @@ describe('service bookmark: ', function() {
     });
 
     describe('create bookmark', function(){
-      it('should return 201', function(done) {
+      it('response code should be 201', function(done) {
         client.post('/bookmark',
           {name: 'dmcelligott.com', type: 'url', url: 'http://dmcelligott.com'},
           function(err, req, res, obj) {
@@ -50,7 +50,7 @@ describe('service bookmark: ', function() {
     });
 
     describe('update bookmark', function() {
-      before(function() {
+      before('create bookmark', function() {
         client.post('/bookmark',
           {name: 'dmcelligott.com', type: 'url', url: 'http://dmcelligott.com'},
           function(err, req, res, data) {
@@ -59,7 +59,7 @@ describe('service bookmark: ', function() {
             assert.equal('http://dmcelligott.com', data.url);
           });
       });
-      it('response should 200', function(done) {
+      it('response code should be 200', function(done) {
           client.put('/bookmark/1',
           {name: 'My Website', type: 'url', url: 'http://dmcelligott.com'},
           function(err, req, res, obj) {
@@ -67,11 +67,41 @@ describe('service bookmark: ', function() {
             done();
           });
       });
-      after(function() {
+      it('get should return updated bookmark', function() {
         client.get('/bookmark/1', function(err, req, res, data) {
           assert.equal('My Website', data.name);
           assert.equal('url', data.type);
           assert.equal('http://dmcelligott.com', data.url);
+        });
+      });
+    });
+
+    describe('delete bookmark', function() {
+      before('create bookmark', function() {
+        client.post('/bookmark',
+          {name: 'dmcelligott.com', type: 'url', url: 'http://dmcelligott.com'},
+          function(err, req, res, data) {
+            assert.equal('dmcelligott.com', data.name);
+            assert.equal('url', data.type);
+            assert.equal('http://dmcelligott.com', data.url);
+          });
+      });
+      it('response code should be 200', function(done) {
+        client.del('/bookmark/1', function(err, req, res, data) {
+          assert.equal(200, res.statusCode);
+          done();
+        });
+      });
+      it('bookmark should return 404',function(done) {
+        client.get('/bookmark/1', function(err, req, res, data) {
+            if(err) {
+              if(err.statusCode != 404) {
+                  throw new Error('/bookmark/1 should throw 404 error');
+              }
+              done();
+            } else {
+              throw new Error('/bookmark/1 should throw 404 error');
+            }
         });
       });
     });
