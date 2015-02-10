@@ -1,3 +1,5 @@
+Travis-CI: [![Build Status](https://travis-ci.org/damc-dev/bookmarks-api.svg?branch=master)](https://travis-ci.org/damc-dev/bookmarks-api)
+
 # bookmarks-api
 API for saving and retrieving bookmarks
 
