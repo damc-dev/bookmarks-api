@@ -1,4 +1,5 @@
-var bookmarkSave = require('save')('bookmark')
+var log         = require('../lib/log');
+var bookmarkSave = require('save')('bookmark', require('../config/saveConfig'));
 
 exports.list = function (req, res, next) {
   bookmarkSave.find({}, function(error, bookmarks) {

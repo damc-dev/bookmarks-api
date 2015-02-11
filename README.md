@@ -8,7 +8,6 @@ API for saving and retrieving bookmarks
 ```
 GET /bookmark
 ```
-
 Lists all bookmarks
 
 ## Find
