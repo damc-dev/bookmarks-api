@@ -7,7 +7,7 @@ var config = {
         count: 4        // keep 3 back copies
       }, {
         stream: process.stdout,
-        level: 'debug'
+        level: 'warn'
       }
     ]
   };
