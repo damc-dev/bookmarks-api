@@ -18,7 +18,8 @@
   "dependencies": {
     "restify": "~2.8.5",
     "save": "~2.0.0",
-    "bunyan": "~1.3.3"
+    "bunyan": "~1.3.3",
+    "restify-jwt": "0.0.2"
   },
   "devDependencies": {
     "mocha": "~2.1.0"

@@ -2,9 +2,12 @@ exports.start = function() {
   var restify = require('restify');
   var bookmark = require('./model/bookmark')
   var log = require('./lib/log');
+  var jwt = require('restify-jwt');
+  var tokenConfig = require('./config/tokenConfig');
+  var appConfig = require('./config/appConfig');
   var server = restify.createServer({
-    name: 'bookmarks-api',
-    version: '1.0.0',
+    name: appConfig.name,
+    version: appConfig.version,
     log: log
   });
 
@@ -22,12 +25,12 @@ exports.start = function() {
     return next();
   });
 
-  server.get('/bookmark', bookmark.list);
-  server.post('/bookmark', bookmark.create);
+  server.get('/bookmark', jwt({secret: tokenConfig.jwt_secret}), bookmark.list);
+  server.post('/bookmark', jwt({secret: tokenConfig.jwt_secret}), bookmark.create);
 
-  server.get('/bookmark/:id', bookmark.find);
-  server.put('/bookmark/:id', bookmark.update);
-  server.del('/bookmark/:id', bookmark.delete);
+  server.get('/bookmark/:id', jwt({secret: tokenConfig.jwt_secret}), bookmark.find);
+  server.put('/bookmark/:id', jwt({secret: tokenConfig.jwt_secret}), bookmark.update);
+  server.del('/bookmark/:id', jwt({secret: tokenConfig.jwt_secret}), bookmark.delete);
 
   server.listen(8080, function () {
     log.info('%s listening at %s', server.name, server.url);
