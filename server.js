@@ -25,14 +25,14 @@ exports.start = function() {
     return next();
   });
 
-  server.get('/api/bookmark', jwt({secret: tokenConfig.jwt_secret}), bookmark.list);
-  server.post('/api/bookmark', jwt({secret: tokenConfig.jwt_secret}), bookmark.create);
+  server.get('/api/bookmark', bookmark.list);
+  server.post('/api/bookmark', bookmark.create);
 
-  server.get('/api/bookmark/:id', jwt({secret: tokenConfig.jwt_secret}), bookmark.find);
-  server.put('/api/bookmark/:id', jwt({secret: tokenConfig.jwt_secret}), bookmark.update);
-  server.del('/api/bookmark/:id', jwt({secret: tokenConfig.jwt_secret}), bookmark.delete);
+  server.get('/api/bookmark/:id', bookmark.find);
+  server.put('/api/bookmark/:id', bookmark.update);
+  server.del('/api/bookmark/:id', bookmark.delete);
 
-  server.listen(8080, function () {
+  server.listen(8088, function () {
     log.info('%s listening at %s', server.name, server.url);
   });
 };
