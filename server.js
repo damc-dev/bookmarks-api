@@ -2,7 +2,6 @@ exports.start = function() {
   var restify = require('restify');
   var bookmark = require('./model/bookmark')
   var log = require('./lib/log');
-  var jwt = require('restify-jwt');
   var tokenConfig = require('./config/tokenConfig');
   var appConfig = require('./config/appConfig');
   var server = restify.createServer({
@@ -14,6 +13,13 @@ exports.start = function() {
   server.use(restify.acceptParser(server.acceptable));
   server.use(restify.queryParser());
   server.use(restify.bodyParser());
+  server.use(function(req,res,next) {
+    if(req.headers['x-authorized-user-id']) {
+      next();
+    } else {
+      return next(new restify.InvalidArgumentError("Missing required header x-authorized-user-id"));
+    }
+  });
 
   server.pre(function (req, res, next) {
     req.log.info({req: req}, 'START');
@@ -32,7 +38,7 @@ exports.start = function() {
   server.put('/api/bookmark/:id', bookmark.update);
   server.del('/api/bookmark/:id', bookmark.delete);
 
-  server.listen(8088, function () {
+  server.listen(appConfig.server_port, function () {
     log.info('%s listening at %s', server.name, server.url);
   });
 };
