@@ -26,7 +26,7 @@ describe('service bookmark: ', function() {
     describe('create bookmark', function(){
       it('response code should be 201', function(done) {
         client.post('/api/bookmark',
-          {name: 'dmcelligott.com', type: 'url', url: 'http://dmcelligott.com'},
+          {name: 'dmcelligott.com', type: 'url', url: 'http://dmcelligott.com', tags: ['awesome']},
           function(err, req, res, obj) {
             if(err) {
                 throw new Error(err);
@@ -39,13 +39,14 @@ describe('service bookmark: ', function() {
             assert.equal(201, res.statusCode);
           });
       });
-      it('should return the created bookmark', function(done) {
+      it('get bookmark should return the created bookmark', function(done) {
         client.post('/api/bookmark',
-          {name: 'dmcelligott.com', type: 'url', url: 'http://dmcelligott.com'},
-          function(err, req, res, obj) {
-            assert.equal('dmcelligott.com', obj.name);
-            assert.equal('url', obj.type);
-            assert.equal('http://dmcelligott.com', obj.url);
+        {name: 'dmcelligott.com', type: 'url', url: 'http://dmcelligott.com', tags: ['awesome']},
+          function(err, req, res, data) {
+            assert.equal('dmcelligott.com', data.name);
+            assert.equal('url', data.type);
+            assert.equal('http://dmcelligott.com', data.url);
+            assert.include(data.tags, 'awesome', 'tags array contains "awesome"');
             done();
           });
       });
@@ -54,26 +55,28 @@ describe('service bookmark: ', function() {
     describe('update bookmark', function() {
       before('create bookmark', function() {
         client.post('/api/bookmark',
-          {name: 'dmcelligott.com', type: 'url', url: 'http://dmcelligott.com'},
+        {name: 'dmcelligott.com', type: 'url', url: 'http://dmcelligott.com', tags: ['awesome']},
           function(err, req, res, data) {
             assert.equal('dmcelligott.com', data.name);
             assert.equal('url', data.type);
             assert.equal('http://dmcelligott.com', data.url);
+            assert.include(data.tags, 'awesome', 'tags array contains "awesome"');
           });
       });
       it('response code should be 200', function(done) {
           client.put('/api/bookmark/1',
-          {name: 'My Website', type: 'url', url: 'http://dmcelligott.com'},
+          {name: 'My Website', type: 'url', url: 'http://dmcelligott.com', tags: ['awesome']},
           function(err, req, res, obj) {
             assert.equal(200, res.statusCode);
             done();
           });
       });
-      it('get should return updated bookmark', function() {
+      it('get bookmark should return updated bookmark', function() {
         client.get('/api/bookmark/1', function(err, req, res, data) {
           assert.equal('My Website', data.name);
           assert.equal('url', data.type);
           assert.equal('http://dmcelligott.com', data.url);
+          assert.include(data.tags, 'awesome', 'tags array contains "awesome"');
         });
       });
     });
@@ -81,11 +84,12 @@ describe('service bookmark: ', function() {
     describe('delete bookmark', function() {
       before('create bookmark', function() {
         client.post('/api/bookmark',
-          {name: 'dmcelligott.com', type: 'url', url: 'http://dmcelligott.com'},
+        {name: 'dmcelligott.com', type: 'url', url: 'http://dmcelligott.com', tags: ['awesome']},
           function(err, req, res, data) {
             assert.equal('dmcelligott.com', data.name);
             assert.equal('url', data.type);
             assert.equal('http://dmcelligott.com', data.url);
+            assert.include(data.tags, 'awesome', 'tags array contains "awesome"');
           });
       });
       it('response code should be 200', function(done) {
@@ -94,7 +98,7 @@ describe('service bookmark: ', function() {
           done();
         });
       });
-      it('bookmark should return 404',function(done) {
+      it('get bookmark should return 404',function(done) {
         client.get('/api/bookmark/1', function(err, req, res, data) {
             if(err) {
               if(err.statusCode != 404) {

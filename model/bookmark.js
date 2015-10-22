@@ -17,7 +17,7 @@ exports.create = function (req, res, next) {
   }
 
   bookmarkSave.create(
-    {userId: req.headers['x-authorized-user-id'], name: req.params.name, type: req.params.type, url: req.params.url},
+    {userId: req.headers['x-authorized-user-id'], name: req.params.name, type: req.params.type, url: req.params.url, tags: req.params.tags},
     function(error, bookmark) {
       if (error) return next(new restify.InvalidArgumentError(JSON.stringify(error.errors)));
       res.send(201, bookmark);
@@ -46,7 +46,7 @@ exports.update = function (req, res, next) {
       }
     });
   bookmarkSave.update(
-    { userId: req.headers['x-authorized-user-id'], _id: req.params.id, name: req.params.name, type: req.params.type, url: req.params.url},
+    { userId: req.headers['x-authorized-user-id'], _id: req.params.id, name: req.params.name, type: req.params.type, url: req.params.url, tags: req.params.tags},
     function(error, bookmark) {
       if (error) return next(new restify.InvalidArgumentError(JSON.stringify(error.errors)));
       res.send();
