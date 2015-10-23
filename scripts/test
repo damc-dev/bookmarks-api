@@ -1,0 +1,5 @@
+#!/bin/sh
+
+source getBaseUrl
+
+echo $BASE_URL

@@ -31,6 +31,11 @@ exports.start = function() {
     return next();
   });
 
+  server.get('api/health', function (req, res, next) {
+    res.send({code: 200, message: "OK"});
+    return next();
+  });
+
   server.get('/api/bookmark', bookmark.list);
   server.post('/api/bookmark', bookmark.create);
 

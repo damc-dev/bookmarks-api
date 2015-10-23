@@ -4,7 +4,8 @@
   "description": "API for saving and retrieving bookmarks",
   "main": "server.js",
   "scripts": {
-    "test": "./node_modules/mocha/bin/mocha"
+    "test": "./node_modules/mocha/bin/mocha",
+    "start": "node app.js"
   },
   "repository": {
     "type": "git",
