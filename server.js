@@ -1,14 +1,23 @@
 exports.start = function() {
   var restify = require('restify');
-  var bookmark = require('./model/bookmark')
-  var log = require('./lib/log');
+  var envConfig = require('./config/envConfig');
+
+  var bunyan = require('bunyan');
+  var logConfig = require('./config/logConfig')(envConfig.logLevel, restify.bunyan.serializers);
+  var log = bunyan.createLogger(logConfig.mainLogger);
+  var accessLog = bunyan.createLogger(logConfig.accessLogger)
+
   var tokenConfig = require('./config/tokenConfig');
   var appConfig = require('./config/appConfig');
   var server = restify.createServer({
     name: appConfig.name,
     version: appConfig.version,
-    log: log
+    log: accessLog
   });
+
+  var saveConfig = require('./config/saveConfig')(log, {engine: undefined, debug: true});
+  var bookmarkService = require('save')('bookmark', saveConfig);
+  var handler = require('./handlers/bookmark_handler')(bookmarkService, {logger: log});
 
   server.use(restify.acceptParser(server.acceptable));
   server.use(restify.queryParser());
@@ -37,12 +46,12 @@ exports.start = function() {
     }
   }
 
-  server.get('/api/bookmark', authorizedUser, bookmark.list);
-  server.post('/api/bookmark', authorizedUser, bookmark.create);
+  server.get('/api/bookmark', authorizedUser, handler.list);
+  server.post('/api/bookmark', authorizedUser, handler.create);
 
-  server.get('/api/bookmark/:id', authorizedUser, bookmark.find);
-  server.put('/api/bookmark/:id', authorizedUser, bookmark.update);
-  server.del('/api/bookmark/:id', authorizedUser, bookmark.delete);
+  server.get('/api/bookmark/:id', authorizedUser, handler.find);
+  server.put('/api/bookmark/:id', authorizedUser, handler.update);
+  server.del('/api/bookmark/:id', authorizedUser, handler.delete);
 
   server.listen(appConfig.server_port, function () {
     log.info('%s listening at %s', server.name, server.url);

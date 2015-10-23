@@ -1,9 +1,8 @@
-var log = require('../lib/log');
-
-var saveConfig = { idProperty: '_id'
-, logger: log
-, engine: undefined
-, debug: true
-};
-
+var saveConfig = function(logger, config) {
+  return {
+    idProperty: '_id',
+    logger: logger,
+    engine: config.engine,
+    debug: config.debug || true};
+}
 module.exports = saveConfig;
