@@ -13,13 +13,6 @@ exports.start = function() {
   server.use(restify.acceptParser(server.acceptable));
   server.use(restify.queryParser());
   server.use(restify.bodyParser());
-  server.use(function(req,res,next) {
-    if(req.headers['x-authorized-user-id']) {
-      next();
-    } else {
-      return next(new restify.InvalidArgumentError("Missing required header x-authorized-user-id"));
-    }
-  });
 
   server.pre(function (req, res, next) {
     req.log.info({req: req}, 'START');
@@ -36,12 +29,20 @@ exports.start = function() {
     return next();
   });
 
-  server.get('/api/bookmark', bookmark.list);
-  server.post('/api/bookmark', bookmark.create);
+  function authorizedUser(req, res, next) {
+    if(req.headers['x-authorized-user-id']) {
+      next();
+    } else {
+      return next(new restify.InvalidArgumentError("Missing required header x-authorized-user-id"));
+    }
+  }
 
-  server.get('/api/bookmark/:id', bookmark.find);
-  server.put('/api/bookmark/:id', bookmark.update);
-  server.del('/api/bookmark/:id', bookmark.delete);
+  server.get('/api/bookmark', authorizedUser, bookmark.list);
+  server.post('/api/bookmark', authorizedUser, bookmark.create);
+
+  server.get('/api/bookmark/:id', authorizedUser, bookmark.find);
+  server.put('/api/bookmark/:id', authorizedUser, bookmark.update);
+  server.del('/api/bookmark/:id', authorizedUser, bookmark.delete);
 
   server.listen(appConfig.server_port, function () {
     log.info('%s listening at %s', server.name, server.url);
