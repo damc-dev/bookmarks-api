@@ -3,5 +3,5 @@
 source getBaseUrl
 
 DEST="$BASE_URL/api/bookmark"
-echo "Request to $DEST"
+echo "GET Request to $DEST"
 curl --header "x-authorized-user-id: 1" $DEST
